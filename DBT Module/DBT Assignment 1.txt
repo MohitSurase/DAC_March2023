@@ -1,0 +1,94 @@
+DBT Assignment 1
+
+1.
+ create table semp(empno char(4), empname char(20), basicSalary float, deptno char(2), depthead char(4));
+ 
+2.
+ create table SDEPT( deptno char(2), deptname char(15));
+
+3. 
+ insert into sdept(deptno, deptname)
+    -> values (10, 'development'),
+    -> (20, 'training');
+	
+4.
+insert into semp(empno, empname, basicSalary, deptno, depthead) values
+    -> (0001, 'SUNIL', 6000, 10, NULL),
+    -> (0002, 'HIREN', 8000, 20, NULL),
+    -> (0003, 'ALI', 4000, 10 , 0001),
+    -> (0004, 'GEORGE', 6000, NULL, 0002);
+
+
+ create table SUPPLIER (`S#` char(2), sname char(10), status int, city varchar(20));
+
+
+ insert into supplier (`S#` , sname , status ,city) values
+    -> ('s1', 'Dom', 80, 'London'),
+    -> ('s2', 'Paul', 70, 'Paris'),
+    -> ('s3', 'rock', 60, 'Athens'),
+    -> ('s4', 'jack', 50, 'London'),
+    -> ('s5', 'sam', 40, 'Athens'),
+    -> ('s6', 'shawn', 30, 'paris'),
+    -> ('s7', 'will', 20, 'Athens'),
+    -> ('s8', 'tom', 10, 'London');
+
+create table parts (`p#` char(2), pname char(10), color char(10), weight double, city  varchar(20));	
+
+insert into parts (`p#`, pname, color, weight, city) values
+    -> ('p1', 'wheel', 'black',10,'london'),
+    -> ('p2', 'engine', 'white',15,'athens'),
+    -> ('p3', 'gear', 'grey',5,'paris');
+	-> ('p4', 'cover', 'red',13,'london'),
+    -> ('p5', 'window', 'grey',13,'athens');
+	
+	 create table projects (`j#` char(2), jname char(10), city  varchar(20));
+	 
+	 
+	 insert into projects (`j#`, jname, city) values
+    -> ('j1', 'EyeTower', 'London'),
+    -> ('j2', 'Stadium', 'Athens'),
+    -> ('j3', 'Park', 'Paris');
+	
+	
+	 create table supplier_parts_project(`s#` char(2), `p#` char(2), `j#` char(2), quantity int);
+	 
+	 
+	 insert into supplier_parts_project(`s#` , `p#` , `j#` , quantity) values
+    -> ('s1', 'p1', 'j1', 100),
+    -> ('s2', 'p2', 'j2', 200),
+    -> ('s3', 'p3', 'j3', 300);
+	
+	
+5.
+ select * from supplier;
+ 
+ 6. select `s#`, sname from supplier;
+ 
+ 7.
+ select pname, color from parts where city='london';
+ 
+ 8.
+ select * from supplier where city='london';
+ 
+ 9. select * from supplier where city='paris' or city='athens';
+ 
+ 
+ 10.
+ select * from projects where city='athens';
+ select pname from projects where city='athens';
+ 
+ 11.
+ select pname from parts where weight>12 and weight<14;
+ select pname from parts where weight>=12 and weight<=14;
+ 
+ 12.
+	 select * from supplier where status>=20;
+	 
+	 13
+	 select * from supplier where city!='london';
+	 
+	 14
+	 select distinct city from supplier;
+	 
+	 15
+	 select *, weight/100 "weight in kilogram", weight*100 "weight in milligram" from parts;
