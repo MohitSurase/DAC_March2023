@@ -1,0 +1,245 @@
+Assignemnt 3
+
+1. Display all the Supplier names with the initial letter capital.
+select concat(upper(left(sname,1)), substring(sname,2)) as CapitalSupplier from supplier;
++-----------------+
+| CapitalSupplier |
++-----------------+
+| Dom             |
+| Paul            |
+| Rock            |
+| Jack            |
+| Sam             |
+| Shawn           |
+| Will            |
+| Tom             |
++-----------------+
+8 rows in set (0.00 sec)
+
+
+2. Display all the Supplier names in upper case. 
+mysql> select upper(sname) as `Supplier Name` from supplier;
++---------------+
+| Supplier Name |
++---------------+
+| DOM           |
+| PAUL          |
+| ROCK          |
+| JACK          |
+| SAM           |
+| SHAWN         |
+| WILL          |
+| TOM           |
++---------------+
+8 rows in set (0.00 sec)
+
+
+3. Display all the Supplier names in lower case. 
+mysql> select lower(sname) as `Supplier Name` from supplier;
++---------------+
+| Supplier Name |
++---------------+
+| dom           |
+| paul          |
+| rock          |
+| jack          |
+| sam           |
+| shawn         |
+| will          |
+| tom           |
++---------------+
+8 rows in set (0.00 sec)
+
+
+4. Display all the Supplier names padded to 25 characters, with spaces on the left.
+
+mysql> select lpad(sname, 25, ' ') as LeftPadding from supplier;
++---------------------------+
+| LeftPadding               |
++---------------------------+
+|                       Dom |
+|                      Paul |
+|                      rock |
+|                      jack |
+|                       sam |
+|                     shawn |
+|                      will |
+|                       tom |
++---------------------------+
+8 rows in set (0.00 sec)
+
+
+5. Display all the Supplier names (with ‘la’ replaced by ‘ro’). 
+ HINT: REPLACE.
+ 
+ mysql> select sname from supplier;
++-------+
+| sname |
++-------+
+| Dom   |
+| Paul  |
+| rock  |
+| jack  |
+| sam   |
+| shawn |
+| will  |
+| tom   |
++-------+
+8 rows in set (0.00 sec)
+
+mysql> select replace(sname,'o','z') from supplier;
++------------------------+
+| replace(sname,'o','z') |
++------------------------+
+| Dzm                    |
+| Paul                   |
+| rzck                   |
+| jack                   |
+| sam                    |
+| shawn                  |
+| will                   |
+| tzm                    |
++------------------------+
+8 rows in set (0.00 sec)
+
+
+6. Implement the above command such that ‘l’ is replaced with ‘r’ and ‘a’ is replaced
+with ‘o’.
+
+mysql> select sname from supplier;
++-------+
+| sname |
++-------+
+| Dom   |
+| Paul  |
+| rock  |
+| jack  |
+| sam   |
+| shawn |
+| will  |
+| tom   |
++-------+
+8 rows in set (0.00 sec)
+
+
+mysql> select replace(replace(sname,'l','r'),'a','o') as result from supplier;
++--------+
+| result |
++--------+
+| Dom    |
+| Pour   |
+| rock   |
+| jock   |
+| som    |
+| shown  |
+| wirr   |
+| tom    |
++--------+
+8 rows in set (0.00 sec)
+
+
+7. Display the Supplier names and the lengths of the names.
+
+mysql> select sname, length(sname) from supplier;
++-------+---------------+
+| sname | length(sname) |
++-------+---------------+
+| Dom   |             3 |
+| Paul  |             4 |
+| rock  |             4 |
+| jack  |             4 |
+| sam   |             3 |
+| shawn |             5 |
+| will  |             4 |
+| tom   |             3 |
++-------+---------------+
+8 rows in set (0.00 sec)
+
+
+8. Use the soundex function to search for a supplier by the name of ‘BLOKE’. 
+
+The SOUNDEX() function in MySQL returns a phonetic 
+representation of a string, based on its pronunciation.
+
+
+mysql> select * from supplier;
++------+-------+--------+--------+
+| S#   | sname | status | city   |
++------+-------+--------+--------+
+| s1   | Dom   |     80 | London |
+| s2   | Paul  |     70 | Paris  |
+| s3   | rock  |     60 | Athens |
+| s4   | jack  |     50 | London |
+| s5   | sam   |     40 | Athens |
+| s6   | shawn |     30 | paris  |
+| s7   | will  |     20 | Athens |
+| s8   | tom   |     10 | London |
++------+-------+--------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select sname from supplier where soundex(sname)=soundex('Dom');
++-------+
+| sname |
++-------+
+| Dom   |
++-------+
+1 row in set (0.01 sec)
+
+mysql> select sname from supplier where soundex(sname)=soundex('Doooom');
++-------+
+| sname |
++-------+
+| Dom   |
++-------+
+1 row in set (0.00 sec)
+
+
+mysql> select sname from supplier where soundex(sname)=soundex('joke');
++-------+
+| sname |
++-------+
+| jack  |
++-------+
+1 row in set (0.00 sec)
+
+
+
+9. Display the Supplier name and the status (as Ten, Twenty, Thirty, etc.).
+mysql> select sname, status ,
+    -> case
+    -> when status=10 then 'Ten'
+    -> when status=20 then 'Twenty'
+    -> when status=30 then 'Thirty'
+    -> else 'More'
+    -> end as StatusInWords
+    -> from supplier;
++-------+--------+---------------+
+| sname | status | StatusInWords |
++-------+--------+---------------+
+| Smith |     20 | Twenty        |
+| Jones |     10 | Ten           |
+| Blake |     30 | Thirty        |
+| Clark |     20 | Twenty        |
+| Adams |     30 | Thirty        |
++-------+--------+---------------+
+5 rows in set (0.00 sec)
+
+ 
+10. Display the current day
+
+mysql> select now();
++---------------------+
+| now()               |
++---------------------+
+| 2023-05-13 13:32:56 |
++---------------------+
+1 row in set (0.00 sec)
+
+
+mysql> select dayname(now()) ;
++----------------+
+| dayname(now()) |
++----------------+
+| Saturday       |
++----------------+
+1 row in set (0.01 sec)

@@ -1,0 +1,435 @@
+1. Display the Supplier name and the Quantity sold.
+
+mysql> select * from supplier_parts_project;
++------+------+------+------+
+| S#   | P#   | J#   | Qty  |
++------+------+------+------+
+| s1   | p1   | j1   |  200 |
+| s1   | p1   | j4   |  700 |
+| s2   | p3   | j1   |  400 |
+| s2   | p3   | j2   |  200 |
+| s2   | p3   | j3   |  200 |
+| s2   | p3   | j4   |  500 |
+| s2   | p3   | j5   |  600 |
+| s2   | p3   | j6   |  400 |
+| s2   | p3   | j7   |  800 |
+| s2   | p5   | j2   |  100 |
+| s3   | p3   | j1   |  200 |
+| s3   | p4   | j2   |  500 |
+| s4   | p6   | j3   |  300 |
++------+------+------+------+
+13 rows in set (0.00 sec)
+
+mysql> select * from supplier;
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| s1   | Smith | 20     | London |
+| s2   | Jones | 10     | Paris  |
+| s3   | Blake | 30     | Paris  |
+| s4   | Clark | 20     | London |
+| s5   | Adams | 30     | Athens |
++------+-------+--------+--------+
+5 rows in set (0.00 sec)
+
+
+mysql> select sname, sum(qty) from supplier
+    -> inner join supplier_parts_project
+    -> on supplier.`s#`=supplier_parts_project.`s#`
+    -> group by sname;
++-------+----------+
+| sname | sum(qty) |
++-------+----------+
+| Smith |      900 |
+| Jones |     3200 |
+| Blake |      700 |
+| Clark |      300 |
++-------+----------+
+4 rows in set (0.00 sec)
+
+
+2. Display the Part name and Quantity sold.
+
+
+mysql>  select * from supplier_parts_project;
++------+------+------+------+
+| S#   | P#   | J#   | Qty  |
++------+------+------+------+
+| s1   | p1   | j1   |  200 |
+| s1   | p1   | j4   |  700 |
+| s2   | p3   | j1   |  400 |
+| s2   | p3   | j2   |  200 |
+| s2   | p3   | j3   |  200 |
+| s2   | p3   | j4   |  500 |
+| s2   | p3   | j5   |  600 |
+| s2   | p3   | j6   |  400 |
+| s2   | p3   | j7   |  800 |
+| s2   | p5   | j2   |  100 |
+| s3   | p3   | j1   |  200 |
+| s3   | p4   | j2   |  500 |
+| s4   | p6   | j3   |  300 |
++------+------+------+------+
+13 rows in set (0.00 sec)
+
+mysql>  select * from parts;
++------+---------+-------+--------+--------+
+| P#   | PNAME   | COLOR | WEIGHT | CITY   |
++------+---------+-------+--------+--------+
+| P1   | nut     | red   |     12 | London |
+| P2   | bolt    | green |     17 | Paris  |
+| P3   | Screw   | blue  |     17 | Rome   |
+| P4   | Stapler | red   |     14 | London |
+| PS   | cam     | blue  |     12 | Paris  |
+| P6   | cog     | red   |     19 | London |
++------+---------+-------+--------+--------+
+6 rows in set (0.00 sec)
+
+
+mysql> select pname, sum(qty) from parts
+    -> inner join supplier_parts_project
+    -> on parts.`p#`=supplier_parts_project.`p#`
+    -> group by pname;
++---------+----------+
+| pname   | sum(qty) |
++---------+----------+
+| nut     |      900 |
+| Screw   |     3300 |
+| Stapler |      500 |
+| cog     |      300 |
++---------+----------+
+4 rows in set (0.00 sec)
+
+
+
+ 
+3. Display the Project name and Quantity sold. 
+
+mysql> select * from supplier_parts_project;
++------+------+------+------+
+| S#   | P#   | J#   | Qty  |
++------+------+------+------+
+| s1   | p1   | j1   |  200 |
+| s1   | p1   | j4   |  700 |
+| s2   | p3   | j1   |  400 |
+| s2   | p3   | j2   |  200 |
+| s2   | p3   | j3   |  200 |
+| s2   | p3   | j4   |  500 |
+| s2   | p3   | j5   |  600 |
+| s2   | p3   | j6   |  400 |
+| s2   | p3   | j7   |  800 |
+| s2   | p5   | j2   |  100 |
+| s3   | p3   | j1   |  200 |
+| s3   | p4   | j2   |  500 |
+| s4   | p6   | j3   |  300 |
++------+------+------+------+
+13 rows in set (0.00 sec)
+
+mysql> select * from projects;
++------+----------+--------+
+| J#   | Jname    | City   |
++------+----------+--------+
+| j1   | sorter   | Paris  |
+| j2   | punch    | Rome   |
+| j3   | reader   | Athens |
+| j4   | console  | Athens |
+| j5   | collator | London |
+| j6   | terminal | Oslo   |
+| j7   | tape     | London |
++------+----------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select jname, sum(qty) from projects
+    -> inner join supplier_parts_project
+    -> on projects.`j#`=supplier_parts_project.`j#`
+    -> group by jname;
++----------+----------+
+| jname    | sum(qty) |
++----------+----------+
+| sorter   |      800 |
+| console  |     1200 |
+| punch    |      800 |
+| reader   |      500 |
+| collator |      600 |
+| terminal |      400 |
+| tape     |      800 |
++----------+----------+
+7 rows in set (0.00 sec)
+
+
+4. Display the Supplier name, Part name, Project name and Quantity sold.
+
+mysql> select s.`s#`, s.sname,p.`p#`, p.pname,j.`j#`, j.jname, q.qty from supplier s
+    -> inner join supplier_parts_project q
+    -> on s.`s#`=q.`s#`
+    -> inner join parts p
+    -> on p.`p#`=q.`p#`
+    -> inner join projects
+    -> j on j.`j#`=q.`j#`
+    -> order by s.`s#`,p.`p#`,j.`j#`;
++------+-------+------+---------+------+----------+------+
+| s#   | sname | p#   | pname   | j#   | jname    | qty  |
++------+-------+------+---------+------+----------+------+
+| s1   | Smith | P1   | nut     | j1   | sorter   |  200 |
+| s1   | Smith | P1   | nut     | j4   | console  |  700 |
+| s2   | Jones | P3   | Screw   | j1   | sorter   |  400 |
+| s2   | Jones | P3   | Screw   | j2   | punch    |  200 |
+| s2   | Jones | P3   | Screw   | j3   | reader   |  200 |
+| s2   | Jones | P3   | Screw   | j4   | console  |  500 |
+| s2   | Jones | P3   | Screw   | j5   | collator |  600 |
+| s2   | Jones | P3   | Screw   | j6   | terminal |  400 |
+| s2   | Jones | P3   | Screw   | j7   | tape     |  800 |
+| s2   | Jones | P5   | cam     | j2   | punch    |  100 |
+| s3   | Blake | P3   | Screw   | j1   | sorter   |  200 |
+| s3   | Blake | P4   | Stapler | j2   | punch    |  500 |
+| s4   | Clark | P6   | cog     | j3   | reader   |  300 |
++------+-------+------+---------+------+----------+------+
+13 rows in set (0.00 sec)
+
+
+5. Display the Supplier name, Supplying Parts to a Project in the same City.
+mysql> select * from supplier; 															
++------+-------+--------+--------+                     
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| s1   | Smith | 20     | London |
+| s2   | Jones | 10     | Paris  |
+| s3   | Blake | 30     | Paris  |
+| s4   | Clark | 20     | London |
+| s5   | Adams | 30     | Athens |
++------+-------+--------+--------+
+mysql> select * from parts;
++------+---------+-------+--------+--------+
+| P#   | PNAME   | COLOR | WEIGHT | CITY   |
++------+---------+-------+--------+--------+
+| P1   | nut     | red   |     12 | London |
+| P2   | bolt    | green |     17 | Paris  |
+| P3   | Screw   | blue  |     17 | Rome   |
+| P4   | Stapler | red   |     14 | London |
+| P5   | cam     | blue  |     12 | Paris  |
+| P6   | cog     | red   |     19 | London |
++------+---------+-------+--------+--------+
+mysql> select * from supplier_parts_project;
++------+------+------+------+
+| S#   | P#   | J#   | Qty  |
++------+------+------+------+
+| s1   | p1   | j1   |  200 |
+| s1   | p1   | j4   |  700 |
+| s2   | p3   | j1   |  400 |
+| s2   | p3   | j2   |  200 |
+| s2   | p3   | j3   |  200 |
+| s2   | p3   | j4   |  500 |
+| s2   | p3   | j5   |  600 |
+| s2   | p3   | j6   |  400 |
+| s2   | p3   | j7   |  800 |
+| s2   | p5   | j2   |  100 |
+| s3   | p3   | j1   |  200 |
+| s3   | p4   | j2   |  500 |
+| s4   | p6   | j3   |  300 |
++------+------+------+------+
+
+
+mysql> select s.sname, p.pname, j.jname , q.qty ,s.city, j.city from supplier s inner join
+    ->  supplier_parts_project q on s.`s#`=q.`s#`
+    -> inner join parts p on p.`p#`=q.`p#`
+    -> inner join projects j on j.`j#`=q.`j#`
+    -> where s.city=j.city;
++-------+-------+--------+------+-------+-------+
+| sname | pname | jname  | qty  | city  | city  |
++-------+-------+--------+------+-------+-------+
+| Blake | Screw | sorter |  200 | Paris | Paris |
+| Jones | Screw | sorter |  400 | Paris | Paris |
++-------+-------+--------+------+-------+-------+
+2 rows in set (0.00 sec)
+
+
+
+6. Display the Part name that is ‘Red’ is color, and the Quantity sold.
+
+mysql> select p.pname, q.qty from parts p
+    -> inner join supplier_parts_project q
+    -> on p.`p#`=q.`p#`
+    -> where p.color='red';
++---------+------+
+| pname   | qty  |
++---------+------+
+| nut     |  200 |
+| nut     |  700 |
+| Stapler |  500 |
+| cog     |  300 |
++---------+------+
+4 rows in set (0.00 sec)
+
+
+7. Display all the Quantity sold by Suppliers with the Status = 20. 
+
+mysql> select s.sname ,s.status, sum(q.qty) from supplier s
+    -> inner join supplier_parts_project q
+    -> on s.`s#`=q.`s#`
+    -> where s.status=20
+    -> group by s.sname;
++-------+--------+------------+
+| sname | status | sum(q.qty) |
++-------+--------+------------+
+| Smith | 20     |        900 |
+| Clark | 20     |        300 |
++-------+--------+------------+
+2 rows in set (0.00 sec)
+
+
+8. Display all the Parts and Quantity with a Weight > 14.
+
+mysql> select p.pname, p.weight, q.qty from parts p
+    -> inner join  supplier_parts_project q
+    -> on p.`p#`=q.`p#`
+    -> where p.weight>14;
++-------+--------+------+
+| pname | weight | qty  |
++-------+--------+------+
+| Screw |     17 |  400 |
+| Screw |     17 |  200 |
+| Screw |     17 |  200 |
+| Screw |     17 |  500 |
+| Screw |     17 |  600 |
+| Screw |     17 |  400 |
+| Screw |     17 |  800 |
+| Screw |     17 |  200 |
+| cog   |     19 |  300 |
++-------+--------+------+
+9 rows in set (0.00 sec)
+
+
+
+mysql> select p.pname, p.weight, sum(q.qty) from parts p
+    -> inner join  supplier_parts_project q
+    -> on p.`p#`=q.`p#`
+    -> where p.weight>14
+    -> group by p.pname, p.weight;
++-------+--------+------------+
+| pname | weight | sum(q.qty) |
++-------+--------+------------+
+| Screw |     17 |       3300 |
+| cog   |     19 |        300 |
++-------+--------+------------+
+2 rows in set (0.00 sec)
+
+
+
+9. Display all the Project names and City, which has bought more than 500 Parts.
+
+mysql> select j.jname, j.city, q.qty from projects j
+    -> inner join supplier_parts_project q
+    -> on j.`j#`=q.`j#`;
++----------+--------+------+
+| jname    | city   | qty  |
++----------+--------+------+
+| sorter   | Paris  |  200 |
+| console  | Athens |  700 |
+| sorter   | Paris  |  400 |
+| punch    | Rome   |  200 |
+| reader   | Athens |  200 |
+| console  | Athens |  500 |
+| collator | London |  600 |
+| terminal | Oslo   |  400 |
+| tape     | London |  800 |
+| punch    | Rome   |  100 |
+| sorter   | Paris  |  200 |
+| punch    | Rome   |  500 |
+| reader   | Athens |  300 |
++----------+--------+------+
+13 rows in set (0.00 sec)
+
+
+mysql> select j.jname, j.city, q.qty from projects j
+    -> inner join supplier_parts_project q
+    -> on j.`j#`=q.`j#`
+    -> where q.qty>500;
++----------+--------+------+
+| jname    | city   | qty  |
++----------+--------+------+
+| console  | Athens |  700 |
+| collator | London |  600 |
+| tape     | London |  800 |
++----------+--------+------+
+3 rows in set (0.00 sec)
+
+
+
+10. Display all the Part names and Quantity sold that have a Weight less than 15. 
+
+mysql> select p.`p#`, p.pname, p.weight, q.qty from parts p
+    -> inner join supplier_parts_project q
+    -> on p.`p#`=q.`p#`
+    -> where p.weight<15;
++------+---------+--------+------+
+| p#   | pname   | weight | qty  |
++------+---------+--------+------+
+| P1   | nut     |     12 |  200 |
+| P1   | nut     |     12 |  700 |
+| P5   | cam     |     12 |  100 |
+| P4   | Stapler |     14 |  500 |
++------+---------+--------+------+
+4 rows in set (0.00 sec)
+
+
+mysql> select p.`p#`, p.pname, p.weight, sum(q.qty) from parts p
+    -> inner join supplier_parts_project q
+    -> on p.`p#`=q.`p#`
+    -> where p.weight<15
+    -> group by  p.`p#`, p.pname, p.weight;
++------+---------+--------+------------+
+| p#   | pname   | weight | sum(q.qty) |
++------+---------+--------+------------+
+| P1   | nut     |     12 |        900 |
+| P5   | cam     |     12 |        100 |
+| P4   | Stapler |     14 |        500 |
++------+---------+--------+------------+
+3 rows in set (0.00 sec)
+
+
+11. Display all the Employee names and the name of their Managers.
+
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1981-04-19 | 3000.00 |    NULL |     20 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-03-12 | 3000.00 |    NULL |     20 |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-05-23 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-03-12 |  950.00 |    NULL |     30 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+
+mysql> select e.ename Employee, m.ename Manager from emp e
+    -> left outer join emp m
+    -> on e.mgr=m.empno;
++----------+---------+
+| Employee | Manager |
++----------+---------+
+| KING     | NULL    |
+| BLAKE    | KING    |
+| CLARK    | KING    |
+| JONES    | KING    |
+| SCOTT    | JONES   |
+| FORD     | JONES   |
+| SMITH    | FORD    |
+| ALLEN    | BLAKE   |
+| WARD     | BLAKE   |
+| MARTIN   | BLAKE   |
+| TURNER   | BLAKE   |
+| ADAMS    | SCOTT   |
+| JAMES    | BLAKE   |
+| MILLER   | CLARK   |
++----------+---------+
+14 rows in set (0.00 sec)

@@ -1,0 +1,324 @@
+1. Display all the Suppliers with the same Status as the supplier, ‘CLARK’. 
+
+mysql> select * from supplier;
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| s1   | Smith | 20     | London |
+| s2   | Jones | 10     | Paris  |
+| s3   | Blake | 30     | Paris  |
+| s4   | Clark | 20     | London |
+| s5   | Adams | 30     | Athens |
++------+-------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from supplier where status=(select status from supplier where sname='clark');
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| s1   | Smith | 20     | London |
+| s4   | Clark | 20     | London |
++------+-------+--------+--------+
+2 rows in set (0.00 sec)
+
+
+2. Display all the Employees in the same department as the employee ‘MILLER’. 
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1981-04-19 | 3000.00 |    NULL |     20 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-03-12 | 3000.00 |    NULL |     20 |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-05-23 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-03-12 |  950.00 |    NULL |     30 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select * from emp where deptno = (select deptno from emp where ename='Miller');
++-------+--------+-----------+------+------------+---------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm | deptno |
++-------+--------+-----------+------+------------+---------+------+--------+
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 | NULL |     10 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 | NULL |     10 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 | NULL |     10 |
++-------+--------+-----------+------+------------+---------+------+--------+
+3 rows in set (0.00 sec)
+
+
+3. Display all the Parts which have more Weight than all the Red parts.
+
+mysql> select * from parts;
++------+---------+-------+--------+--------+
+| P#   | PNAME   | COLOR | WEIGHT | CITY   |
++------+---------+-------+--------+--------+
+| P1   | nut     | red   |     12 | London |
+| P2   | bolt    | green |     17 | Paris  |
+| P3   | Screw   | blue  |     17 | Rome   |
+| P4   | Stapler | red   |     14 | London |
+| P5   | cam     | blue  |     12 | Paris  |
+| P6   | cog     | red   |     19 | London |
+| P7   | Hammer  | brown |     20 | Rome   |
++------+---------+-------+--------+--------+
+7 rows in set (0.00 sec)
+
+
+mysql> select * from parts where weight > all(select weight from parts where color='red');
++------+--------+-------+--------+------+
+| P#   | PNAME  | COLOR | WEIGHT | CITY |
++------+--------+-------+--------+------+
+| P7   | Hammer | brown |     20 | Rome |
++------+--------+-------+--------+------+
+1 row in set (0.00 sec)
+
+
+4. Display all the Projects going on in the same city as the project ‘TAPE’. 
+
+mysql> select * from projects;
++------+----------+--------+
+| J#   | Jname    | City   |
++------+----------+--------+
+| j1   | sorter   | Paris  |
+| j2   | punch    | Rome   |
+| j3   | reader   | Athens |
+| j4   | console  | Athens |
+| j5   | collator | London |
+| j6   | terminal | Oslo   |
+| j7   | tape     | London |
++------+----------+--------+
+7 rows in set (0.00 sec)
+
+
+mysql> select * from projects where city = (select city from projects where jname='tape');
++------+----------+--------+
+| J#   | Jname    | City   |
++------+----------+--------+
+| j5   | collator | London |
+| j7   | tape     | London |
++------+----------+--------+
+2 rows in set (0.00 sec)
+
+
+mysql> select * from projects where city = (select city from projects where jname='tape') and jname!='tape';
++------+----------+--------+
+| J#   | Jname    | City   |
++------+----------+--------+
+| j5   | collator | London |
++------+----------+--------+
+1 row in set (0.00 sec)
+
+
+5. Display all the Parts with Weight less than all the Green parts.
+
+
+mysql> select * from parts;
++------+---------+-------+--------+--------+
+| P#   | PNAME   | COLOR | WEIGHT | CITY   |
++------+---------+-------+--------+--------+
+| P1   | nut     | red   |     12 | London |
+| P2   | bolt    | green |     17 | Paris  |
+| P3   | Screw   | blue  |     17 | Rome   |
+| P4   | Stapler | red   |     14 | London |
+| P5   | cam     | blue  |     12 | Paris  |
+| P6   | cog     | red   |     19 | London |
+| P7   | Hammer  | brown |     20 | Rome   |
++------+---------+-------+--------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select weight from parts where color='green';
++--------+
+| weight |
++--------+
+|     17 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select * from parts where weight < (select weight from parts where color='green');
++------+---------+-------+--------+--------+
+| P#   | PNAME   | COLOR | WEIGHT | CITY   |
++------+---------+-------+--------+--------+
+| P1   | nut     | red   |     12 | London |
+| P4   | Stapler | red   |     14 | London |
+| P5   | cam     | blue  |     12 | Paris  |
++------+---------+-------+--------+--------+
+3 rows in set (0.00 sec)
+
+
+
+6. Display the name of the Supplier who has sold the maximum Quantity (in one 
+sale).
+
+mysql> select * from supplier;
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| s1   | Smith | 20     | London |
+| s2   | Jones | 10     | Paris  |
+| s3   | Blake | 30     | Paris  |
+| s4   | Clark | 20     | London |
+| s5   | Adams | 30     | Athens |
++------+-------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from supplier_parts_project;
++------+------+------+------+
+| S#   | P#   | J#   | Qty  |
++------+------+------+------+
+| s1   | p1   | j1   |  200 |
+| s1   | p1   | j4   |  700 |
+| s2   | p3   | j1   |  400 |
+| s2   | p3   | j2   |  200 |
+| s2   | p3   | j3   |  200 |
+| s2   | p3   | j4   |  500 |
+| s2   | p3   | j5   |  600 |
+| s2   | p3   | j6   |  400 |
+| s2   | p3   | j7   |  800 |
+| s2   | p5   | j2   |  100 |
+| s3   | p3   | j1   |  200 |
+| s3   | p4   | j2   |  500 |
+| s4   | p6   | j3   |  300 |
++------+------+------+------+
+13 rows in set (0.01 sec)
+
+
+
+mysql> select s.sname, q.qty from supplier s
+    -> inner join supplier_parts_project q on s.`s#`=q.`s#`
+    -> where q.qty = (select max(q.qty) from supplier_parts_project q);
++-------+------+
+| sname | qty  |
++-------+------+
+| Jones |  800 |
++-------+------+
+1 row in set (0.00 sec)
+
+
+
+
+7. Display the name of the Employee with the minimum Salary. 
+
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1981-04-19 | 3000.00 |    NULL |     20 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-03-12 | 3000.00 |    NULL |     20 |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-05-23 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-03-12 |  950.00 |    NULL |     30 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select * from emp where sal=(select min(sal) from emp);
++-------+-------+-------+------+------------+--------+------+--------+
+| empno | ename | job   | mgr  | hiredate   | sal    | comm | deptno |
++-------+-------+-------+------+------------+--------+------+--------+
+|  7369 | SMITH | CLERK | 7902 | 1980-12-17 | 800.00 | NULL |     20 |
++-------+-------+-------+------+------------+--------+------+--------+
+1 row in set (0.00 sec)
+
+
+
+
+
+8. Display the name of the Supplier who has sold the maximum overall Quantity (sum 
+of Sales). 
+
+mysql> select * from supplier;
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| s1   | Smith | 20     | London |
+| s2   | Jones | 10     | Paris  |
+| s3   | Blake | 30     | Paris  |
+| s4   | Clark | 20     | London |
+| s5   | Adams | 30     | Athens |
++------+-------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from supplier_parts_project;
++------+------+------+------+
+| S#   | P#   | J#   | Qty  |
++------+------+------+------+
+| s1   | p1   | j1   |  200 |
+| s1   | p1   | j4   |  700 |
+| s2   | p3   | j1   |  400 |
+| s2   | p3   | j2   |  200 |
+| s2   | p3   | j3   |  200 |
+| s2   | p3   | j4   |  500 |
+| s2   | p3   | j5   |  600 |
+| s2   | p3   | j6   |  400 |
+| s2   | p3   | j7   |  800 |
+| s2   | p5   | j2   |  100 |
+| s3   | p3   | j1   |  200 |
+| s3   | p4   | j2   |  500 |
+| s4   | p6   | j3   |  300 |
++------+------+------+------+
+13 rows in set (0.01 sec)
+
+mysql> select s.sname, sum(q.qty) from supplier s
+    -> inner join supplier_parts_project q on s.`s#`=q.`s#`
+    -> group by sname
+    -> order by sum(q.qty) desc
+    -> limit 1;
++-------+------------+
+| sname | sum(q.qty) |
++-------+------------+
+| Jones |       3200 |
++-------+------------+
+1 row in set (0.00 sec)
+
+
+9. Display the name of the Department with the maximum number of Employees.
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450 | NULL |     10 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1981-04-19 | 3000 | NULL |     20 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-03-12 | 3000 | NULL |     20 |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500 |    0 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-05-23 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-03-12 |  950 | NULL |     30 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select deptno, count(ename) from emp
+    -> group by deptno
+    -> order by count(ename) desc
+    -> limit 1;
++--------+--------------+
+| deptno | count(ename) |
++--------+--------------+
+|     30 |            6 |
++--------+--------------+
+1 row in set (0.00 sec)
